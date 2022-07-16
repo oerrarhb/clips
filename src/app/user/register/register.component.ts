@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import IUser from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +9,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
-  constructor(private auth: AngularFireAuth, private db: AngularFirestore) {}
+  constructor(private auth: AuthService) {}
 
   inSubmission = false;
 
@@ -17,26 +17,31 @@ export class RegisterComponent {
   alertMsg = 'Please wait ! your account is being created !';
   alertColor = 'blue';
 
+  name = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  email = new FormControl('', [Validators.required, Validators.email]);
+  age = new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(18),
+    Validators.max(120),
+  ]);
+  password = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm),
+  ]);
+  confirm_password = new FormControl('', [Validators.required]);
+  phoneNumber = new FormControl('', [
+    Validators.required,
+    Validators.minLength(13),
+    Validators.maxLength(13),
+  ]);
+
   registerForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    age: new FormControl('', [
-      Validators.required,
-      Validators.min(18),
-      Validators.max(120),
-    ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.pattern(
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
-      ),
-    ]),
-    confirm_password: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [
-      Validators.required,
-      Validators.minLength(13),
-      Validators.maxLength(13),
-    ]),
+    name: this.name,
+    email: this.email,
+    age: this.age,
+    password: this.password,
+    confirm_password: this.confirm_password,
+    phoneNumber: this.phoneNumber,
   });
 
   async register() {
@@ -45,19 +50,8 @@ export class RegisterComponent {
     this.alertColor = 'blue';
     this.inSubmission = true;
 
-    const { email, password } = this.registerForm.value;
-
     try {
-      const userCredantials = await this.auth.createUserWithEmailAndPassword(
-        email as string,
-        password as string
-      );
-      await this.db.collection('users').add({
-        name: this.registerForm.controls.name,
-        email: this.registerForm.controls.email,
-        age: this.registerForm.controls.age,
-        phoneNumber: this.registerForm.controls.phoneNumber,
-      });
+      await this.auth.createUse(this.registerForm.value as IUser);
     } catch (e) {
       console.error(e);
       this.alertMsg = 'An unexpected error occured. Please try again later !';

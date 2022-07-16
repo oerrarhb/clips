@@ -7,24 +7,18 @@
   <!-- Name -->
   <div class="mb-3">
     <label class="inline-block mb-2">Name</label>
-    <app-input
-      [control]="registerForm.controls.name"
-      placeholder="Enter your name"
-    ></app-input>
+    <app-input [control]="name" placeholder="Enter your name"></app-input>
   </div>
   <!-- Email -->
   <div class="mb-3">
     <label class="inline-block mb-2">Email</label>
-    <app-input
-      [control]="registerForm.controls.email"
-      placeholder="Enter your email"
-    ></app-input>
+    <app-input [control]="email" placeholder="Enter your email"></app-input>
   </div>
   <!-- Age -->
   <div class="mb-3">
     <label class="inline-block mb-2">Age</label>
     <app-input
-      [control]="registerForm.controls.age"
+      [control]="age"
       type="number"
       placeholder="Enter your age"
     ></app-input>
@@ -33,7 +27,7 @@
   <div class="mb-3">
     <label class="inline-block mb-2">Password</label>
     <app-input
-      [control]="registerForm.controls.password"
+      [control]="password"
       type="password"
       placeholder="Enter your password"
     ></app-input>
@@ -42,7 +36,7 @@
   <div class="mb-3">
     <label class="inline-block mb-2">Confirm Password</label>
     <app-input
-      [control]="registerForm.controls.confirm_password"
+      [control]="confirm_password"
       type="password"
       placeholder="Confirm your password"
     ></app-input>
@@ -51,7 +45,7 @@
   <div class="mb-3">
     <label class="inline-block mb-2">Phone Number</label>
     <app-input
-      [control]="registerForm.controls.phoneNumber"
+      [control]="phoneNumber"
       format="(000)000-0000"
       placeholder="Enter your phone number"
     >
