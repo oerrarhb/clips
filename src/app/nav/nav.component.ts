@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { ModalService } from '../services/modal.service';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -12,15 +10,10 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
   isAuthenticated = false;
 
-  constructor(
-    public modal: ModalService,
-    public auth: AuthService,
-    private afAuth: AngularFireAuth,
-    private router: Router
-  ) {
+  constructor(public modal: ModalService, public auth: AuthService) {
     auth.isAuthenticated$.subscribe((status) => {
       this.isAuthenticated = status;
-      console.log(this.isAuthenticated);
+      console.log(`auth status :${this.isAuthenticated}`);
     });
   }
 
